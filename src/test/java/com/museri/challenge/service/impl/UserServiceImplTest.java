@@ -3,7 +3,7 @@ package com.museri.challenge.service.impl;
 import com.museri.challenge.dto.UserLoggedResponse;
 import com.museri.challenge.dto.UserSingUpRequest;
 import com.museri.challenge.dto.UserSingUpResponse;
-import com.museri.challenge.exception.BadRequestException;
+import com.museri.challenge.exception.EntityNotFoundException;
 import com.museri.challenge.exception.UniqueEmailException;
 import com.museri.challenge.model.User;
 import com.museri.challenge.repository.UserRepository;
@@ -82,11 +82,11 @@ public class UserServiceImplTest {
 
 
     @Test
-    void testLogin_InvalidToken() {
-        String token = "INVALIDTOKEN";
-        Mockito.when(jwtToken.getEmailFromToken(any())).thenThrow(Exception.class);
-        RuntimeException exception = assertThrows(BadRequestException.class, () -> userService.login(token));
-        assertEquals("Invalid Token.", exception.getMessage());
+    void testLogin_UserDoesNotExist() {
+        String token = "MYTOKEN";
+        Mockito.when(jwtToken.getEmailFromToken(any())).thenReturn("jj@mm.ss");
+        RuntimeException exception = assertThrows(EntityNotFoundException.class, () -> userService.login(token));
+        assertEquals("There is no user with the email: jj@mm.ss", exception.getMessage());
     }
     @Test
     void testLogin_Success() {
