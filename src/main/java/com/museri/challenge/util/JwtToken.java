@@ -37,7 +37,6 @@ public class JwtToken {
         return Jwts.builder()
                 .setSubject(sub)
                 .claim("email", email)
-                .claim("lastLogin", lastLogin)
                 .setExpiration(expiration)
                 .setIssuedAt(new Date())
                 .setIssuer(issuer)
@@ -46,7 +45,7 @@ public class JwtToken {
                 .compact();
     }
 
-    public Claims getClaimsFromToken(String token) throws Exception {
+    public Claims getClaimsFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .build()
@@ -54,13 +53,8 @@ public class JwtToken {
                 .getBody();
     }
 
-    public String getEmailFromToken(String token) throws Exception {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
+    public String getEmailFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
         return (String) claims.get("email");
     }
 

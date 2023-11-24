@@ -1,7 +1,9 @@
 package com.museri.challenge.service.impl;
 
+import com.museri.challenge.dto.UserLoggedResponse;
 import com.museri.challenge.dto.UserSingUpRequest;
 import com.museri.challenge.dto.UserSingUpResponse;
+import com.museri.challenge.exception.BadRequestException;
 import com.museri.challenge.exception.UniqueEmailException;
 import com.museri.challenge.model.User;
 import com.museri.challenge.repository.UserRepository;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
@@ -38,7 +41,7 @@ public class UserServiceImplTest {
         UserSingUpRequest userSingUpRequest = new UserSingUpRequest();
         userSingUpRequest.setEmail("existing-email@example.com");
         Mockito.when(userRepository.findByEmail(userSingUpRequest.getEmail())).thenReturn(Optional.of(new User()));
-        UniqueEmailException exception = assertThrows(UniqueEmailException.class, () -> userService.save(userSingUpRequest));
+        assertThrows(UniqueEmailException.class, () -> userService.save(userSingUpRequest));
     }
 
     @Test
@@ -76,4 +79,36 @@ public class UserServiceImplTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.save(userSingUpRequest));
         assertEquals("Failed to save", exception.getMessage());
     }
+
+
+    @Test
+    void testLogin_InvalidToken() {
+        String token = "INVALIDTOKEN";
+        Mockito.when(jwtToken.getEmailFromToken(any())).thenThrow(Exception.class);
+        RuntimeException exception = assertThrows(BadRequestException.class, () -> userService.login(token));
+        assertEquals("Invalid Token.", exception.getMessage());
+    }
+    @Test
+    void testLogin_Success() {
+
+        User user = new User();
+        user.setEmail("jmuseri@hotmail.com");
+        user.setToken("dummy-token");
+        user.setIsActive(true);
+
+        Mockito.when(jwtToken.getEmailFromToken(any())).thenReturn("jmuseri@hotmail.com");
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        Mockito.when(jwtToken.generateToken(any(), any())).thenReturn("new-token");
+        Mockito.when(userRepository.save(any(User.class))).thenReturn(user);
+
+
+        Optional<UserLoggedResponse> result = userService.login("dummy-token");
+        assertTrue(result.isPresent());
+        UserLoggedResponse userResponse = result.get();
+        assertEquals("new-token", userResponse.getToken());
+        assertTrue(userResponse.getEmail().equals(user.getEmail()));
+
+    }
+
+
 }

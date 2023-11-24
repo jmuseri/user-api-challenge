@@ -1,5 +1,6 @@
 package com.museri.challenge.exception;
 
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,12 +41,6 @@ public class ResponseExceptionHandler {
     }
 
     @ExceptionHandler (MethodArgumentNotValidException.class)
-    @ResponseStatus (HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleValidationException(MethodArgumentNotValidException ex) {
-        return buildExceptionResponse(ex, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler (MethodArgumentNotValidException.class)
     @ResponseStatus (org.springframework.http.HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
         String errors = ex.getBindingResult()
@@ -54,6 +49,13 @@ public class ResponseExceptionHandler {
                 .map(error -> error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
         return buildExceptionResponse(ex, HttpStatus.BAD_REQUEST, "Validation errors: " + errors);
+    }
+
+
+    @ExceptionHandler (MalformedJwtException.class)
+    @ResponseStatus (code = HttpStatus.BAD_REQUEST)
+    public final ExceptionResponse handleEntityMalformedJwtException(MalformedJwtException exception) {
+        return buildExceptionResponse(exception, HttpStatus.BAD_REQUEST, "Invalid Token");
     }
 
 

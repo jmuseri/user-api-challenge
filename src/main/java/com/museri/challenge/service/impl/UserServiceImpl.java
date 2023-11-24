@@ -39,10 +39,6 @@ public class UserServiceImpl implements UserService {
         this.jwtToken = jwtToken;
     }
 
-    public Optional<User> save(User user) {
-        return Optional.of(userRepository.save(user));
-    }
-
     @Override
     @Transactional
     public Optional<UserSingUpResponse> save(UserSingUpRequest userSingUpRequest) {
@@ -75,25 +71,22 @@ public class UserServiceImpl implements UserService {
         User userLoggedIn = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("There is no user with the email: " + email));
         userLoggedIn.setLastLogin(LocalDateTime.now());
         userLoggedIn.setToken(jwtToken.generateToken(userLoggedIn.getEmail(), userLoggedIn.getLastLogin()));
-        return save(userLoggedIn)
-                .map(userUpdate -> {
-                    List<PhoneDTO> phoneDtos = userUpdate.getPhones()
-                            .stream()
-                            .map(phone -> new PhoneDTO(phone.getNumber(), phone.getCityCode(), phone.getCountryCode()))
-                            .collect(Collectors.toList());
-
-                    return UserLoggedResponse.builder()
-                            .withId(userUpdate.getId())
-                            .withCreated(userUpdate.getCreated())
-                            .withLastLogin(LocalDateTime.now())
-                            .withToken(userUpdate.getToken())
-                            .withIsActive(userUpdate.getIsActive())
-                            .withName(userUpdate.getName())
-                            .withEmail(userUpdate.getEmail())
-                            .withPassword(userUpdate.getPassword())
-                            .withPhones(phoneDtos)
-                            .build();
-                });
+        userRepository.save(userLoggedIn);
+        List<PhoneDTO> phoneDtos = userLoggedIn.getPhones()
+                .stream()
+                .map(phone -> new PhoneDTO(phone.getNumber(), phone.getCityCode(), phone.getCountryCode()))
+                .collect(Collectors.toList());
+        return Optional.of(UserLoggedResponse.builder()
+                .withId(userLoggedIn.getId())
+                .withCreated(userLoggedIn.getCreated())
+                .withLastLogin(LocalDateTime.now())
+                .withToken(userLoggedIn.getToken())
+                .withIsActive(userLoggedIn.getIsActive())
+                .withName(userLoggedIn.getName())
+                .withEmail(userLoggedIn.getEmail())
+                .withPassword(userLoggedIn.getPassword())
+                .withPhones(phoneDtos)
+                .build());
     }
 
 }

@@ -14,7 +14,7 @@ import static com.museri.challenge.util.Constants.FORMATTER_DATE;
 @JsonInclude (JsonInclude.Include.NON_NULL)
 public class UserSingUpResponse {
 
-    private java.util.UUID id;
+    private Long id;
 
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = FORMATTER_DATE)
     private LocalDateTime created;

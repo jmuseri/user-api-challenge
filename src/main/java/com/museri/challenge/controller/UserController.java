@@ -33,7 +33,7 @@ public class UserController {
 
     @ApiOperation (value = "Check for existing user", response = UserLoggedResponse.class)
     @GetMapping ("/login")
-    public ResponseEntity<UserLoggedResponse> login(@RequestParam String token) throws Exception {
+    public ResponseEntity<UserLoggedResponse> login(@RequestParam String token) {
         log.info("Login user with Token: " + token);
         return ResponseEntity.accepted().body(userService.login(token).get());
     }

@@ -27,15 +27,12 @@ A continuación, se presenta el diagrama de secuencia para el flujo principal de
 
 ![Diagrama de Secuencia](src/main/resources/static/diagrama-de-secuencia.png)
 
-En este diagrama, se ilustra la interacción entre los diferentes componentes y clases durante el proceso de creación y consulta de usuarios.
-
 ## Diagrama de Componentes
 
-El diagrama de componentes ofrece una visión general de la estructura de componentes de la aplicación:
+Este diagrama de componentes ofrece una visión general de la estructura de componentes de la aplicación:
 
 ![Diagrama de Componentes](src/main/resources/static/diagrama-de-componentes.png)
 
-Este diagrama destaca los principales módulos y su interconexión en el sistema.
 
 # API Documentation
 

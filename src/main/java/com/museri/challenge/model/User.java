@@ -14,14 +14,15 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue
-    private java.util.UUID id;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String email;
     private String password;
     private Boolean isActive;
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "user")
     private List<Phone> phones= new ArrayList<>();
+    @Column(length = 300)
     private String token;
     private LocalDateTime lastLogin;
     private LocalDateTime created;
