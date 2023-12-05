@@ -29,9 +29,9 @@ public class ResponseExceptionHandler {
     }
 
     @ExceptionHandler (UniqueEmailException.class)
-    @ResponseStatus (HttpStatus.CONFLICT)
+    @ResponseStatus (HttpStatus.BAD_REQUEST)
     public final ExceptionResponse handleUniqueEmailException(UniqueEmailException ex) {
-        return buildExceptionResponse(ex, HttpStatus.CONFLICT);
+        return buildExceptionResponse(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler (EntityNotFoundException.class)
