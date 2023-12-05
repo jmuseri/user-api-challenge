@@ -3,6 +3,7 @@ package com.museri.challenge.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ public class UserSingUpRequest {
     private String email;
 
     @NotEmpty(message="Password must not be empty.")
-    @Pattern(
-            regexp = "^(?=(?:[^A-Z]*[A-Z]){1})(?=(?:\\D*\\d\\D*\\d){2})[a-zA-Z\\d]{8,12}$",
+    @Pattern(regexp = "^(?=(?:[^A-Z]*[A-Z]){1})(?=(?:\\D*\\d){2})[A-Za-z\\d]{8,12}$",
             message = "Invalid password format. The password must have exactly one uppercase letter, exactly two digits, and be 8 to 12 characters long."
     )
     private String password;
+    @Valid
     private List<PhoneDTO> phones= new ArrayList<>();
 
 }

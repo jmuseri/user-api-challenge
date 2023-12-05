@@ -78,7 +78,7 @@ Endpoint para la creación de un nuevo usuario.
    {
       "timestamp": "Timestamp",
       "codigo": "int",
-      "detail": "String"
+      "detail": "int"
    }
    ]
 }
@@ -104,7 +104,7 @@ Endpoint para consultar la información de un usuario existente.
     {
       "number": "long",
       "cityCode": "int",
-      "countryCode": "String"
+      "countryCode": "int"
     }
   ]
 }

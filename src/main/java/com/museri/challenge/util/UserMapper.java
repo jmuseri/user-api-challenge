@@ -13,7 +13,7 @@ public class UserMapper {
         user.setIsActive(true);
         user.setEmail(userSignUpRequest.getEmail());
         user.setPhones(userSignUpRequest.getPhones().stream()
-                .map(PhoneMapper::mapPhone)
+                .map(phoneDTO -> PhoneMapper.mapPhone(phoneDTO, user))
                 .collect(Collectors.toList())
         );
         return user;
