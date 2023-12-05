@@ -13,12 +13,15 @@ import java.util.List;
 public class UserSingUpRequest {
 
     private String name;
-    @NotEmpty
+    @NotEmpty(message="Email must not be empty.")
     @Pattern (regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Invalid email format")
     private String email;
 
-    @NotEmpty
-    @Pattern (regexp = "^(?=.*\\d.*\\d)(?=.*[A-Z])(?=.*[a-z])\\S{8,12}$", message = "Invalid password format")
+    @NotEmpty(message="Password must not be empty.")
+    @Pattern(
+            regexp = "^(?=(?:[^A-Z]*[A-Z]){1})(?=(?:\\D*\\d\\D*\\d){2})[a-zA-Z\\d]{8,12}$",
+            message = "Invalid password format. The password must have exactly one uppercase letter, exactly two digits, and be 8 to 12 characters long."
+    )
     private String password;
     private List<PhoneDTO> phones= new ArrayList<>();
 
