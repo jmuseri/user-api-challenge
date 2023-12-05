@@ -22,8 +22,6 @@ public class User implements Serializable {
     private Boolean isActive;
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "user")
     private List<Phone> phones= new ArrayList<>();
-    @Column(length = 300)
-    private String token;
     private LocalDateTime lastLogin;
     private LocalDateTime created;
 }
