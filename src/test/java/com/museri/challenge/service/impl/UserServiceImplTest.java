@@ -73,7 +73,6 @@ public class UserServiceImplTest {
         UserSingUpRequest userSingUpRequest = new UserSingUpRequest();
         userSingUpRequest.setEmail("new-email@example.com");
         Mockito.when(userRepository.findByEmail(userSingUpRequest.getEmail())).thenReturn(Optional.empty());
-        Mockito.when(jwtToken.generateToken(any(), any())).thenReturn("dummy-token");
         Mockito.when(bCryptPasswordEncoder.encode(any())).thenReturn("hashed-password");
 
         Mockito.when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("Failed to save"));
