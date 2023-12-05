@@ -55,7 +55,6 @@ public class UserServiceImplTest {
 
         User user = new User();
         user.setEmail(userSingUpRequest.getEmail());
-        user.setToken("dummy-token");
         user.setIsActive(true);
         Mockito.when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -93,7 +92,6 @@ public class UserServiceImplTest {
 
         User user = new User();
         user.setEmail("jmuseri@hotmail.com");
-        user.setToken("dummy-token");
         user.setIsActive(true);
 
         Mockito.when(jwtToken.getEmailFromToken(any())).thenReturn("jmuseri@hotmail.com");

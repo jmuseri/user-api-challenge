@@ -47,14 +47,13 @@ public class UserServiceImpl implements UserService {
                     throw new UniqueEmailException("The email [" + user.getEmail() + "] is already registered");
                 });
         User newUser = UserMapper.buildUser(userSingUpRequest);
-        newUser.setToken(jwtToken.generateToken(newUser.getEmail(), newUser.getLastLogin()));
         newUser.setPassword(bCryptPasswordEncoder.encode(userSingUpRequest.getPassword()));
         newUser = userRepository.save(newUser);
         return Optional.of(UserSingUpResponse.builder()
                 .withId(newUser.getId())
                 .withCreated(newUser.getCreated())
                 .withLastLogin(LocalDateTime.now())
-                .withToken(newUser.getToken())
+                .withToken(jwtToken.generateToken(newUser.getEmail(), newUser.getLastLogin()))
                 .withIsActive(newUser.getIsActive())
                 .build());
     }
@@ -70,7 +69,6 @@ public class UserServiceImpl implements UserService {
         }
         User userLoggedIn = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("There is no user with the email: " + email));
         userLoggedIn.setLastLogin(LocalDateTime.now());
-        userLoggedIn.setToken(jwtToken.generateToken(userLoggedIn.getEmail(), userLoggedIn.getLastLogin()));
         userRepository.save(userLoggedIn);
         List<PhoneDTO> phoneDtos = userLoggedIn.getPhones()
                 .stream()
@@ -80,7 +78,7 @@ public class UserServiceImpl implements UserService {
                 .withId(userLoggedIn.getId())
                 .withCreated(userLoggedIn.getCreated())
                 .withLastLogin(LocalDateTime.now())
-                .withToken(userLoggedIn.getToken())
+                .withToken(jwtToken.generateToken(userLoggedIn.getEmail(), userLoggedIn.getLastLogin()))
                 .withIsActive(userLoggedIn.getIsActive())
                 .withName(userLoggedIn.getName())
                 .withEmail(userLoggedIn.getEmail())
