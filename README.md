@@ -55,8 +55,8 @@ Endpoint para la creación de un nuevo usuario.
   "phones": [
     {
       "number": "long",
-      "citycode": "int",
-      "contrycode": "String"
+      "cityCode": "int",
+      "countryCode": "String"
     }
   ]
 }
@@ -103,8 +103,8 @@ Endpoint para consultar la información de un usuario existente.
   "phones": [
     {
       "number": "long",
-      "citycode": "int",
-      "contrycode": "String"
+      "cityCode": "int",
+      "countryCode": "String"
     }
   ]
 }
